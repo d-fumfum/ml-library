@@ -1,0 +1,22 @@
+# Build outputs
+*.o
+*.obj
+*.out
+*.exe
+*.a
+*.so
+*.dylib
+
+# Build directories
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+.DS_Store
