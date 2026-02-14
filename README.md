@@ -2,6 +2,21 @@
 
 A small, from-scratch C++ matrix and ML-ops sandbox. work-in-progress.
 
+## Project Layout
+
+```text
+machine_learning_library/
+├── include/
+│   └── ml/
+│       ├── matrix.h
+│       └── utils.h
+├── src/
+│   ├── abstraction.cpp
+│   ├── matrix.cpp
+│   └── utils.cpp
+└── README.md
+```
+
 ## Build
 
 ```bash

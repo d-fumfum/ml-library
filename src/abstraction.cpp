@@ -80,40 +80,44 @@ dense::dense(int in_features, int out_features) {
 
 
 
-matrix dense::forward(const matrix &input){
-    cached_input = input; // saving X 
-    
-    matrix out = mat_create(input.row, W.data.col);
-    if(mat_mul(&out, &input, &W.data, 1, 0, 0) != 0)
-        return out;
+matrix dense::forward(const matrix& input) {
+    cached_input = input;
 
-    if(b.data.row == 1 && b.data.col == out.col){
-        for(int r = 0; r < out.row; ++r)
-            for(int c = 0; c < out.col; ++c)
+    matrix out = mat_create(input.row, W.data.col);
+    if (mat_mul(&out, &input, &W.data, 1, 0, 0) != 0)
+        return out;
+    
+    if (b.data.row == 1 && b.data.col == out.col) {
+        for (int r = 0; r < out.row; ++r) {
+            for (int c = 0; c < out.col; ++c)
                 out.data[r * out.col + c] += b.data.data[c];
+        }
     }
 
     return out;
 }
 
-matrix dense::backward(const matrix &grad_output){
-    matrix grad_input = mat_craete(grad_output.row, W.data.row);
-    mat_mul(&grad_input, &grad_output, &W.data, 1,0,0);
-    
-    if(W.grad.row != W.data.row || W.grad.col != W.data.col)
+
+
+matrix dense::backward(const matrix& grad_output) {
+    matrix grad_input = mat_create(grad_output.row, W.data.row);
+    mat_mul(&grad_input, &grad_output, &W.data, 1, 0, 1);
+
+    if (W.grad.row != W.data.row || W.grad.col != W.data.col) 
         W.grad = mat_create(W.data.row, W.data.col);
-
-    mat_mul(&W.grad, &cached_input, &grad_input, 1, 1, 0);
-
-    if(b.grad.row != 1 || b.grad.col != grad_output.col)
-        b.grad = mat_create(1,grad_output.col);
-    else
-        mat_fill(&b.grad,0.0f);
-
     
-    for(int r = 0; r < grad_output.col; ++r)
-        for(int c = 0; c < grad_output.col; ++c)
-            b.grad.data[c] +=  grad_output.data[r * grad_data.col + c];
+    mat_mul(&W.grad, &cached_input, &grad_output, 1, 1, 0);
+
+    if (b.grad.row != 1 || b.grad.col != grad_output.col)
+        b.grad = mat_create(1, grad_output.col);
+    else
+        mat_fill(&b.grad, 0.0f);
+    
+
+    for (int r = 0; r < grad_output.row; ++r)
+        for (int c = 0; c < grad_output.col; ++c) 
+            b.grad.data[c] += grad_output.data[r * grad_output.col + c];
+
 
     return grad_input;
 }
