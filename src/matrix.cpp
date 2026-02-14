@@ -1,63 +1,6 @@
-#include <bits/stdc++.h>
+#include "ml/matrix.h"
+#include "ml/utils.h"
 using namespace std;
-
-struct matrix{
-    vector<float> data;
-    int row=0, col=0;
-};
-
-
-int error_occured(string error){
-    cout<<"Error occured: "<<error;
-    return -1;
-}
-
-
-inline float exponen(float x) {
-    if (x < -10.0f) return 0.0f;
-    if (x > 10.0f) x = 10.0f;
-
-    float x2 = x * x;
-    return 1.0f
-         + x
-         + x2 * 0.5f
-         + x2 * x * (1.0f / 6.0f)
-         + x2 * x2 * (1.0f / 24.0f)
-         + x2 * x2 * x * (1.0f / 120.0f);
-    // 1 + x + x^2/2 + x^3/6 + x^4/24 + x^5/120
-}
-
-
-inline float logar(float x) {
-    if (x <= 0.0f) return -1e9;
-
-    uint32_t bits;
-    memcpy(&bits, &x, sizeof(x));
-
-    int exp = int((bits >> 23) & 0xFF) - 127;
-    bits = (bits & 0x7FFFFF) | 0x3F800000; 
-    float m;
-    std::memcpy(&m, &bits, sizeof(m));
-
-    float z  = m - 1.0f;
-    float z2 = z * z;
-    float z3 = z2 * z;
-    float z4 = z3 * z;
-
-    float ln_m = z - 0.5f * z2 + (1.0f / 3.0f) * z3 - 0.25f * z4;
-    return exp * 0.6931471805599453f + ln_m; // ln(2)
-}
-
-
-
-float max_ab(float a, float b){
-    if(a>=b) return a;
-    return b;
-}
-
-
-
-
 
 
 
@@ -190,14 +133,14 @@ int mat_softmax(matrix *out, const matrix *in){
 
         float sum = 0.0f;
         for (int c = 0; c < cols; ++c){
-            float e = exponen(in->data[r * cols + c] - max_val);
+            float e = my_exp(in->data[r * cols + c] - max_val);
             out->data[r * cols + c] = e;
             sum += e; 
         }
 
         if(sum == 0.0f)
             return error_occured("softmax sum is zero");
-
+ 
         for(int c=0; c<cols; ++c)
             out->data[r*cols+c] /= sum;
     }
@@ -227,9 +170,9 @@ int mat_cross_entropy(matrix *out, const matrix *p, const matrix *q){
         for (int r = 0; r < rows; ++r) {
             float loss = 0.0f;
             for (int c = 0; c < cols; ++c) {
-                float pc = std::max(p->data[r * cols + c], small);
+                float pc = my_max(p->data[r * cols + c], small);
                 float qc = q->data[r * cols + c];
-                loss -= qc * std::log(pc);
+                loss -= qc * my_log(pc);
             }
             out->data[r] = loss;
         }
@@ -239,9 +182,9 @@ int mat_cross_entropy(matrix *out, const matrix *p, const matrix *q){
         for (int r = 0; r < rows; ++r) {
             float loss = 0.0f;
             for (int c = 0; c < cols; ++c) {
-                float pc = max_ab(p->data[r * cols + c], small);
+                float pc = my_max(p->data[r * cols + c], small);
                 float qc = q->data[r * cols + c];
-                loss -= qc * logar(pc);
+                loss -= qc * my_log(pc);
             }
             total += loss;
         }
@@ -261,7 +204,7 @@ int mat_relu_add_grad(matrix *out, const matrix *in){
     const size_t n = static_cast<size_t>(in->row) * in->col;
     if(out->data.size() != n || in->data.size() != n)
         return error_occured("data size mismatch");
-
+ 
     for(size_t i = 0; i < n; ++i){
         if(in->data[i] <= 0.0f)
             out->data[i] = 0.0f;
@@ -321,7 +264,7 @@ int mat_cross_entropy_add_grad(matrix *out, const matrix *p, const matrix *q){
     const float scale = (p->row > 0) ? (1.0f / p->row) : 1.0f;
 
     for(size_t i = 0; i < n; ++i){
-        const float pc = max_ab(p->data[i], small);
+        const float pc = my_max(p->data[i], small);
         out->data[i] += (-q->data[i] / pc) * scale;
     }
 
