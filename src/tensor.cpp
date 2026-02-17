@@ -1,20 +1,8 @@
+#include "ml/tensor.h"
 #include "ml/matrix.h"
 #include "ml/utils.h"
 
-#include <cstdint>
 #include <random>
-#include <vector>
-
-struct shape{
-    int row=0;
-    int col=0;
-    int layer=0;
-};
-
-struct tensor{
-    std::vector<float> data;
-    shape s;
-};
 
 static std::mt19937& global_rng() {
     static std::mt19937 rng(std::random_device{}());
@@ -298,7 +286,35 @@ int tsr_cross_entropy(tensor* out, const tensor* p, const tensor* q){
 }
 
 
-matrix tsr_sum_depth(const tensor& t);
+matrix tsr_sum_depth(const tensor& t){
+    if(t.s.row < 0 || t.s.col < 0 || t.s.layer < 0){
+        error_occured("negative tensor shape");
+        return mat_create(0, 0);
+    }
+
+    matrix out = mat_create(t.s.row, t.s.col);
+    if(t.s.row == 0 || t.s.col == 0 || t.s.layer == 0)
+        return out;
+
+    const size_t expected =
+        static_cast<size_t>(t.s.row) *
+        static_cast<size_t>(t.s.col) *
+        static_cast<size_t>(t.s.layer);
+    if(t.data.size() != expected){
+        error_occured("tensor data size mismatch");
+        return out;
+    }
+
+    const size_t plane = static_cast<size_t>(t.s.row) * static_cast<size_t>(t.s.col);
+    for(int l = 0; l < t.s.layer; ++l){
+        const size_t base = static_cast<size_t>(l) * plane;
+        for(size_t i = 0; i < plane; ++i){
+            out.data[i] += t.data[base + i];
+        }
+    }
+
+    return out;
+}
 
 
 tensor& tsr_zero(tensor& t){
@@ -335,7 +351,7 @@ tensor tsr_random_uniform(tensor& out, float lo, float hi){
 }
 
 
-void tsr_set_seed(uint32_t seed) {
+void tsr_set_seed(int seed) {
     global_rng().seed(seed);
 }
 

@@ -1,6 +1,12 @@
 # machine_learning_library
 
-A small, growing, from-scratch C++ 2d and 3d tensor and ML-ops sandbox. work-in-progress.
+- A growing, from-scratch C++ ML library.
+
+- Has:
+    - 2d and 3d tensor
+    - ML-ops sandbox.
+
+- Work-in-progress.
 
 ## Notes
 

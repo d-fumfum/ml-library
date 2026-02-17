@@ -1,0 +1,57 @@
+[
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/matrix.cpp",
+    "file": "src/matrix.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/model.cpp",
+    "file": "src/model.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/abstraction.cpp",
+    "file": "src/structure/abstraction.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/loss.cpp",
+    "file": "src/structure/loss.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/module.cpp",
+    "file": "src/structure/module.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/optimizer.cpp",
+    "file": "src/structure/optimizer.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/sequential.cpp",
+    "file": "src/structure/sequential.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/sgd.cpp",
+    "file": "src/structure/sgd.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/structure/trainer.cpp",
+    "file": "src/structure/trainer.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/tensor.cpp",
+    "file": "src/tensor.cpp"
+  },
+  {
+    "directory": "/home/david/coding/c++/machine_learning_library",
+    "command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -pedantic -Iinclude -c src/utils.cpp",
+    "file": "src/utils.cpp"
+  }
+]
